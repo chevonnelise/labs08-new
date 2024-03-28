@@ -1,4 +1,6 @@
 import React, {useState} from 'react';
+import TaskItem from './Task';
+import EditTask from './EditTask';
 
 export default function TaskList(){
 
@@ -67,21 +69,13 @@ export default function TaskList(){
         return (
             tasks.map((task) => (
                 taskBeingEdited !== task.id ?
-                    (<li key={task.id}>
-                        {task.description}
-                        <input  type="checkbox"
-                                checked={task.done === true}
-                                onChange={()=> checkTask(task.id)}
-                                value={task.description === true}
-                        />
-                        <button onClick={()=> { 
-                                                setTaskBeingEdited(task.id); 
-                                                setModifiedTaskName(task.description)
-                                        }}                          
-                        > Edit </button>
-                        <button onClick={()=> deleteTask(task.id)}
-                        > Delete </button>
-                    </li>) : displayEditTask(task)
+                    <TaskItem task={task}
+                                checkTask={checkTask}
+                                setTaskBeingEdited={setTaskBeingEdited}
+                                setModifiedTaskName={setModifiedTaskName}
+                                deleteTask={deleteTask} 
+                    /> 
+                    : displayEditTask(task)
                 )
             )
         )
@@ -89,16 +83,13 @@ export default function TaskList(){
 
     function displayEditTask(task){
         return(
-            <li key={task.id}>
-                <span> {task.id} </span>
-                <input  type="text"
-                        name={modifiedTaskName}
-                        placeholder="Enter new description to update"
-                        value={modifiedTaskName}
-                        onChange={(event)=> setModifiedTaskName(event.target.value)}
-                />
-                <button onClick={()=>{updateTask(task.id); setTaskBeingEdited(0); setModifiedTaskName("")}}> Confirm </button>
-            </li>
+            <EditTask   task={task}
+                        modifiedTaskName={modifiedTaskName}
+                        setModifiedTaskName={setModifiedTaskName}
+                        updateTask={updateTask}
+                        deleteTask={deleteTask}
+                        setTaskBeingEdited={setTaskBeingEdited}
+            />
         )
     }
 
